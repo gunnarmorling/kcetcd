@@ -20,6 +20,12 @@ mvn clean verify
 
 ## Testing With Docker Compose
 
+The Docker Compose set-up in _docker-compose.yml_ provides the following infrastructure for manual testing:
+
+* Apache Kafka and ZooKeeper
+* Kafka Connect with the etcd connector
+* Three etcd clusters: one with three nodes, two with one nodes each
+
 Prepare the connector plug-in:
 
 ```shell
@@ -32,13 +38,13 @@ Start Apache Kafka, Kafka Connect, ZooKeeper, and etcd:
 docker-compose up
 ```
 
-Register connector:
+Register the connector:
 
 ```shell
 http PUT localhost:8083/connectors/test-connector/config < register-test.json
 ```
 
-Put something into etcd:
+Put something into one of the etcd clusters:
 
 ```shell
 docker-compose exec etcd-a-1 /bin/sh -c "ETCDCTL_API=3 /usr/local/bin/etcdctl put foo bar
@@ -53,6 +59,8 @@ docker-compose exec kafka /kafka/bin/kafka-console-consumer.sh \
     --property print.key=true \
     --topic etcd-a
 ```
+
+Apply equivalent steps for clusters/topics _etcd-b_ and _etcd-c_.
 
 Shut down:
 
