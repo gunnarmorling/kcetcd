@@ -1,0 +1,5 @@
+{
+  "connector.class": "dev.morling.kcetcd.source.EtcdSourceConnector",
+  "tasks.max": "2",
+  "endpoints" : "etcd-1#http://localhost:2379"
+}
