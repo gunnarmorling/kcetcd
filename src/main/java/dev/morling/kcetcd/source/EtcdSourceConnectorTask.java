@@ -87,6 +87,11 @@ public class EtcdSourceConnectorTask extends SourceTask {
     public List<SourceRecord> poll() throws InterruptedException {
         List<SourceRecord> values = new ArrayList<>();
         queue.drainTo(values);
+
+        if (values.isEmpty()) {
+            Thread.sleep(100);
+        }
+
         return values;
     }
 
