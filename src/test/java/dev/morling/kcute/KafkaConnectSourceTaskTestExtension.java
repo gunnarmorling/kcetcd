@@ -55,8 +55,6 @@ public class KafkaConnectSourceTaskTestExtension implements TaskRunner, Extensio
 
     @Override
     public void beforeEach(ExtensionContext context) throws Exception {
-        System.out.println("BeforeEach");
-
         task = taskClass.getDeclaredConstructor().newInstance();
         start();
     }

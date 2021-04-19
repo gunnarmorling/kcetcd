@@ -26,10 +26,14 @@ import org.apache.kafka.common.config.ConfigDef.Importance;
 import org.apache.kafka.common.config.ConfigDef.Type;
 import org.apache.kafka.connect.connector.Task;
 import org.apache.kafka.connect.source.SourceConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EtcdSourceConnector extends SourceConnector {
 
     public static final String CLUSTERS = "clusters";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EtcdSourceConnector.class);
 
     private String clusters;
 
@@ -40,7 +44,7 @@ public class EtcdSourceConnector extends SourceConnector {
 
     @Override
     public void start(Map<String, String> props) {
-        System.out.println("Starting connector");
+        LOGGER.debug("Starting connector");
         this.clusters = props.get(CLUSTERS);
     }
 
@@ -68,7 +72,7 @@ public class EtcdSourceConnector extends SourceConnector {
 
     @Override
     public void stop() {
-        System.out.println("Stopping connector");
+        LOGGER.debug("Stopping connector");
     }
 
     @Override

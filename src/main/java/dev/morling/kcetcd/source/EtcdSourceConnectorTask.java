@@ -28,6 +28,8 @@ import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import org.apache.kafka.connect.source.SourceTaskContext;
 import org.apache.kafka.connect.storage.OffsetStorageReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.etcd.jetcd.Client;
 import io.etcd.jetcd.Constants;
@@ -41,11 +43,12 @@ public class EtcdSourceConnectorTask extends SourceTask {
     private static final String NAME = "name";
     private static final String REVISION = "revision";
 
-    private OffsetStorageReader storageReader;
-
-    private List<ListenerRegistration> registrations;
+    private static final Logger LOGGER = LoggerFactory.getLogger(EtcdSourceConnectorTask.class);
 
     private final BlockingQueue<SourceRecord> queue = new ArrayBlockingQueue<>(2048);
+
+    private OffsetStorageReader storageReader;
+    private List<ListenerRegistration> registrations;
 
     @Override
     public String version() {
@@ -60,8 +63,8 @@ public class EtcdSourceConnectorTask extends SourceTask {
 
     @Override
     public void start(Map<String, String> props) {
-        System.out.println("Starting task");
-        System.out.println("Props: " + props);
+        LOGGER.debug("Starting task");
+        LOGGER.debug("Task configuration properties: {}", props);
 
         String[] clusters = props.get(EtcdSourceConnector.CLUSTERS).split(";");
         registrations = new ArrayList<>(clusters.length);
@@ -97,7 +100,7 @@ public class EtcdSourceConnectorTask extends SourceTask {
 
     @Override
     public void stop() {
-        System.out.println("Stopping task");
+        LOGGER.debug("Stopping task");
         queue.clear();
 
         for (ListenerRegistration listenerRegistration : registrations) {
@@ -118,9 +121,8 @@ public class EtcdSourceConnectorTask extends SourceTask {
             watch = client.getWatchClient();
 
             Watch.Listener listener = Watch.listener(response -> {
-                System.out.println("Revision: " + response.getHeader().getRevision());
                 for (WatchEvent event : response.getEvents()) {
-                    System.out.println("event mod rev: " + event.getKeyValue().getModRevision());
+                    LOGGER.trace("Received event: {}", event.getEventType());
                     queue.offer(toSourceRecord(event));
                 }
             });
