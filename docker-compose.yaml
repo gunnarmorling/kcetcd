@@ -30,7 +30,7 @@ services:
      - zookeeper
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
-     - ADVERTISED_HOST_NAME=192.168.178.28
+    # - ADVERTISED_HOST_NAME=192.168.178.28
   etcd:
     image: gcr.io/etcd-development/etcd:v3.4.13
     command: >
@@ -45,16 +45,17 @@ services:
     ports:
       - "2379:2379"
       - "3380:2380"
-  # connect:
-  #  image: debezium/connect:${DEBEZIUM_VERSION}
-  #  ports:
-  #   - 8083:8083
-  #  links:
-  #   - kafka
-  #   - postgres
-  #  environment:
-  #   - BOOTSTRAP_SERVERS=kafka:9092
-  #   - GROUP_ID=1
-  #   - CONFIG_STORAGE_TOPIC=my_connect_configs
-  #   - OFFSET_STORAGE_TOPIC=my_connect_offsets
-  #   - STATUS_STORAGE_TOPIC=my_connect_statuses
+  connect:
+   image: debezium/connect-base:1.6
+   ports:
+    - 8083:8083
+   links:
+    - kafka
+   volumes:
+    - ./target/kcetcd-connector:/kafka/connect/kcetcd-connector
+   environment:
+    - BOOTSTRAP_SERVERS=kafka:9092
+    - GROUP_ID=1
+    - CONFIG_STORAGE_TOPIC=my_connect_configs
+    - OFFSET_STORAGE_TOPIC=my_connect_offsets
+    - STATUS_STORAGE_TOPIC=my_connect_statuses
