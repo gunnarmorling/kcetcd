@@ -1,6 +1,13 @@
 # kc-etcd
 
-An example Kafka Connect source connector, ingesting changes from etcd.
+_An example Kafka Connect source connector, ingesting changes from etcd_
+
+The goal of this project is not primarily to provide a production-ready connector for [etcd](https://etcd.io/),
+but rather to serve as an example for a complete yet simple Kafka Connect source connector,
+adhering to best practices -- such as supporting multiple tasks --
+and serving as an example connector for learning purposes
+(e.g. on connector implementation and testing) and basis for explorations of related KIPs such as [KIP-618](https://cwiki.apache.org/confluence/display/KAFKA/KIP-618%3A+Exactly-Once+Support+for+Source+Connectors)
+("Exactly-Once Support for Source Connectors").
 
 ## Usage
 
