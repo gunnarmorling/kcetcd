@@ -29,8 +29,9 @@ import org.apache.kafka.connect.source.SourceConnector;
 
 public class EtcdSourceConnector extends SourceConnector {
 
-    private static final String ENDPOINTS = "endpoints";
-    private String endpoints;
+    public static final String CLUSTERS = "clusters";
+
+    private String clusters;
 
     @Override
     public String version() {
@@ -40,7 +41,7 @@ public class EtcdSourceConnector extends SourceConnector {
     @Override
     public void start(Map<String, String> props) {
         System.out.println("Starting connector");
-        this.endpoints = props.get(ENDPOINTS);
+        this.clusters = props.get(CLUSTERS);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class EtcdSourceConnector extends SourceConnector {
 
     @Override
     public List<Map<String, String>> taskConfigs(int maxTasks) {
-        String[] partitionsArray = endpoints.split(",");
+        String[] partitionsArray = clusters.split(";");
         int chunkSize = ceilDiv(partitionsArray.length, maxTasks);
 
         List<Map<String, String>> configs = new ArrayList<>();
@@ -58,7 +59,7 @@ public class EtcdSourceConnector extends SourceConnector {
             String[] chunk = Arrays.copyOfRange(partitionsArray, i, Math.min(partitionsArray.length, i + chunkSize));
 
             Map<String, String> config = new HashMap<>();
-            config.put(ENDPOINTS, String.join(",", chunk));
+            config.put(CLUSTERS, String.join(";", chunk));
             configs.add(config);
         }
 
@@ -72,7 +73,8 @@ public class EtcdSourceConnector extends SourceConnector {
 
     @Override
     public ConfigDef config() {
-        return new ConfigDef().define(ENDPOINTS, Type.STRING, Importance.HIGH, "etcd cluster endpoint(s)");
+        return new ConfigDef().define(CLUSTERS, Type.STRING, Importance.HIGH,
+                "etcd cluster(s),in the form of <name>=endpoint(,endpoint)*(;<name>=endpoint(,endpoint)*)*");
     }
 
     private int ceilDiv(int x, int y) {

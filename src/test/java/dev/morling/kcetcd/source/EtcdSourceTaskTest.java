@@ -40,7 +40,7 @@ public class EtcdSourceTaskTest {
 
     @RegisterExtension
     public TaskRunner taskRunner = TaskRunner.forSourceTask(EtcdSourceConnectorTask.class)
-            .with("endpoints", "test-etcd#" + etcd.getClientEndpoints().get(0))
+            .with("clusters", "test-etcd=" + etcd.getClientEndpoints().get(0))
             .build();
 
     @Test

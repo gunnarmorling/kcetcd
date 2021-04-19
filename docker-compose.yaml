@@ -30,21 +30,77 @@ services:
      - zookeeper
     environment:
      - ZOOKEEPER_CONNECT=zookeeper:2181
-    # - ADVERTISED_HOST_NAME=192.168.178.28
-  etcd:
+     # - ADVERTISED_HOST_NAME=192.168.178.28
+  etcd-a-1:
     image: gcr.io/etcd-development/etcd:v3.4.13
     command: >
         /usr/local/bin/etcd
         --name node1
-        --initial-advertise-peer-urls http://127.0.0.1:2380
-        --listen-peer-urls http://0.0.0.0:2380
-        --advertise-client-urls http://127.0.0.1:2379
         --listen-client-urls http://0.0.0.0:2379
-        --initial-cluster node1=http://127.0.0.1:2380
+        --advertise-client-urls http://etcd-a-1:2379
+        --listen-peer-urls http://0.0.0.0:2380
+        --initial-advertise-peer-urls http://etcd-a-1:2380
+        --initial-cluster node1=http://etcd-a-1:2380,node2=http://etcd-a-2:2380,node3=http://etcd-a-3:2380
         --debug
     ports:
       - "2379:2379"
+      - "2380:2380"
+  etcd-a-2:
+    image: gcr.io/etcd-development/etcd:v3.4.13
+    command: >
+        /usr/local/bin/etcd
+        --name node2
+        --listen-client-urls http://0.0.0.0:2379
+        --advertise-client-urls http://etcd-a-2:2379
+        --listen-peer-urls http://0.0.0.0:2380
+        --initial-advertise-peer-urls http://etcd-a-2:2380
+        --initial-cluster node1=http://etcd-a-1:2380,node2=http://etcd-a-2:2380,node3=http://etcd-a-3:2380
+        --debug
+    ports:
+      - "3379:2379"
       - "3380:2380"
+  etcd-a-3:
+    image: gcr.io/etcd-development/etcd:v3.4.13
+    command: >
+        /usr/local/bin/etcd
+        --name node3
+        --listen-client-urls http://0.0.0.0:2379
+        --advertise-client-urls http://etcd-a-3:2379
+        --listen-peer-urls http://0.0.0.0:2380
+        --initial-advertise-peer-urls http://etcd-a-3:2380
+        --initial-cluster node1=http://etcd-a-1:2380,node2=http://etcd-a-2:2380,node3=http://etcd-a-3:2380
+        --debug
+    ports:
+      - "4379:2379"
+      - "4380:2380"
+  etcd-b-1:
+    image: gcr.io/etcd-development/etcd:v3.4.13
+    command: >
+        /usr/local/bin/etcd
+        --name node1
+        --listen-client-urls http://0.0.0.0:2379
+        --advertise-client-urls http://etcd-b-1:2379
+        --listen-peer-urls http://0.0.0.0:2380
+        --initial-advertise-peer-urls http://etcd-b-1:2380
+        --initial-cluster node1=http://etcd-b-1:2380
+        --debug
+    ports:
+      - "5379:2379"
+      - "5380:2380"
+  etcd-c-1:
+    image: gcr.io/etcd-development/etcd:v3.4.13
+    command: >
+        /usr/local/bin/etcd
+        --name node1
+        --listen-client-urls http://0.0.0.0:2379
+        --advertise-client-urls http://etcd-c-1:2379
+        --listen-peer-urls http://0.0.0.0:2380
+        --initial-advertise-peer-urls http://etcd-c-1:2380
+        --initial-cluster node1=http://etcd-c-1:2380
+        --debug
+    ports:
+      - "6379:2379"
+      - "6380:2380"
   connect:
    image: debezium/connect-base:1.6
    ports:

@@ -41,7 +41,7 @@ http PUT localhost:8083/connectors/test-connector/config < register-test.json
 Put something into etcd:
 
 ```shell
-docker-compose exec etcd /bin/sh -c "ETCDCTL_API=3 /usr/local/bin/etcdctl put foo bar
+docker-compose exec etcd-a-1 /bin/sh -c "ETCDCTL_API=3 /usr/local/bin/etcdctl put foo bar
 ```
 
 Consume events from Kafka:
@@ -51,7 +51,7 @@ docker-compose exec kafka /kafka/bin/kafka-console-consumer.sh \
     --bootstrap-server kafka:9092 \
     --from-beginning \
     --property print.key=true \
-    --topic etcd-1
+    --topic etcd-a
 ```
 
 Shut down:

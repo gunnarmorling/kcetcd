@@ -63,18 +63,18 @@ public class EtcdSourceConnectorTask extends SourceTask {
         System.out.println("Starting task");
         System.out.println("Props: " + props);
 
-        String[] endpoints = props.get("endpoints").split(",");
-        registrations = new ArrayList<>(endpoints.length);
-        for (String endpoint : endpoints) {
-            String[] parts = endpoint.split("#");
+        String[] clusters = props.get(EtcdSourceConnector.CLUSTERS).split(";");
+        registrations = new ArrayList<>(clusters.length);
+        for (String cluster : clusters) {
+            String[] parts = cluster.split("=");
 
             if (parts.length != 2) {
-                throw new IllegalArgumentException("Endpoint configuration must be given in the form of <cluster name#URLs>");
+                throw new IllegalArgumentException("Cluster configuration must be given in the form of <name>=endpoint(,endpoint)*(;<name>=endpoint(,endpoint)*)*");
             }
 
             String name = parts[0];
             Long lastRevision = getStartingRevision(name);
-            registrations.add(new ListenerRegistration(name, parts[1], lastRevision));
+            registrations.add(new ListenerRegistration(name, parts[1].split(","), lastRevision));
         }
     }
 
@@ -112,9 +112,9 @@ public class EtcdSourceConnectorTask extends SourceTask {
         private final Watch watch;
         private final Watch.Watcher watcher;
 
-        private ListenerRegistration(String name, String endpoint, long startingRevision) {
+        private ListenerRegistration(String name, String endpoints[], long startingRevision) {
             this.name = name;
-            client = Client.builder().endpoints(endpoint).build();
+            client = Client.builder().endpoints(endpoints).build();
             watch = client.getWatchClient();
 
             Watch.Listener listener = Watch.listener(response -> {
