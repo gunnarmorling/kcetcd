@@ -15,8 +15,6 @@
  */
 package dev.morling.kcetcd.source;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -32,6 +30,8 @@ import io.etcd.jetcd.Client;
 import io.etcd.jetcd.KV;
 import io.etcd.jetcd.launcher.EtcdCluster;
 import io.etcd.jetcd.test.EtcdClusterExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EtcdSourceTaskTest {
 
