@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
      Copyright 2021 The original authors
@@ -17,7 +18,8 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -110,20 +112,20 @@
           <artifactId>formatter-maven-plugin</artifactId>
           <version>2.15.0</version>
           <configuration>
-              <configFile>etc/eclipse-formatter-config.xml</configFile>
+            <configFile>etc/eclipse-formatter-config.xml</configFile>
           </configuration>
         </plugin>
 
         <plugin>
-            <groupId>net.revelc.code</groupId>
-            <artifactId>impsort-maven-plugin</artifactId>
-            <version>1.6.0</version>
-            <configuration>
-                <groups>java.,javax.,org.,com.</groups>
-                <removeUnused>true</removeUnused>
-                <staticAfter>true</staticAfter>
-<!--                 <staticGroups>java.,javax.,org.w3c.,org.xml.,junit.</staticGroups> -->
-            </configuration>
+          <groupId>net.revelc.code</groupId>
+          <artifactId>impsort-maven-plugin</artifactId>
+          <version>1.6.0</version>
+          <configuration>
+            <groups>java.,javax.,org.,com.</groups>
+            <removeUnused>true</removeUnused>
+            <staticAfter>true</staticAfter>
+            <!-- <staticGroups>java.,javax.,org.w3c.,org.xml.,junit.</staticGroups> -->
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-assembly-plugin</artifactId>
@@ -203,21 +205,21 @@
             </goals>
             <phase>process-sources</phase>
           </execution>
-      </executions>
-    </plugin>
-    <plugin>
-      <groupId>net.revelc.code</groupId>
-      <artifactId>impsort-maven-plugin</artifactId>
-      <executions>
-        <execution>
-          <id>sort-imports</id>
-          <goals>
-            <goal>sort</goal>
-          </goals>
-          <phase>process-sources</phase>
-        </execution>
-      </executions>
-    </plugin>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>net.revelc.code</groupId>
+        <artifactId>impsort-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>sort-imports</id>
+            <goals>
+              <goal>sort</goal>
+            </goals>
+            <phase>process-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <profiles>
@@ -256,7 +258,7 @@
       <id>stage</id>
       <build>
         <plugins>
-         <plugin>
+          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
@@ -278,25 +280,25 @@
           <plugin>
             <artifactId>maven-resources-plugin</artifactId>
             <executions>
-                <execution>
-                  <id>copy-jar</id>
-                  <phase>pre-integration-test</phase>
-                  <goals>
-                    <goal>copy-resources</goal>
-                  </goals>
-                  <configuration>
-                    <outputDirectory>${project.build.directory}/kcetcd-connector</outputDirectory>
-                    <resources>
-                      <resource>
-                        <directory>${project.build.directory}</directory>
-                       <filtering>false</filtering>
-                        <includes>
+              <execution>
+                <id>copy-jar</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/kcetcd-connector</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${project.build.directory}</directory>
+                      <filtering>false</filtering>
+                      <includes>
                         <include>*.jar</include>
-                        </includes>
-                      </resource>
-                    </resources>
-                  </configuration>
-                </execution>
+                      </includes>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
         </plugins>
