@@ -23,7 +23,7 @@
 
   <groupId>dev.morling.demos</groupId>
   <artifactId>kafka-connect-source-example</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <name>kafka-connect-source-example</name>
   <url>https://www.morling.dev/</url>
@@ -226,8 +226,15 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.2.0</version>
             <configuration>
+              <attach>false</attach>
+              <appendAssemblyId>false</appendAssemblyId>
+              <finalName>kcetcd-${project.version}</finalName>
+              <outputDirectory>target/distributions</outputDirectory>
+              <workDirectory>${project.build.directory}/assembly/work</workDirectory>
               <descriptors>
                 <descriptor>src/main/assembly/assembly.xml</descriptor>
               </descriptors>
