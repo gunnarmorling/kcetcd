@@ -35,4 +35,5 @@ distributions:
     artifacts:
       - path: target/distributions/{{distributionName}}-{{projectVersion}}.tar.gz
         transform: '{{distributionName}}/{{distributionName}}-{{projectEffectiveVersion}}.tar.gz'
-
+      - path: target/distributions/{{distributionName}}-{{projectVersion}}.zip
+        transform: '{{distributionName}}/{{distributionName}}-{{projectEffectiveVersion}}.zip'
