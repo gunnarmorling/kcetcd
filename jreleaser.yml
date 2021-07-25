@@ -29,11 +29,9 @@ project:
     version: 11
     groupId: dev.morling.demos
 
-distributions:
-  kcetcd:
-    type: JAVA_BINARY
-    artifacts:
-      - path: target/distributions/{{distributionName}}-{{projectVersion}}.tar.gz
-        transform: '{{distributionName}}/{{distributionName}}-{{projectEffectiveVersion}}.tar.gz'
-      - path: target/distributions/{{distributionName}}-{{projectVersion}}.zip
-        transform: '{{distributionName}}/{{distributionName}}-{{projectEffectiveVersion}}.zip'
+files:
+  artifacts:
+    - path: target/distributions/kcetcd-{{projectVersion}}.tar.gz
+      transform: 'kcetcd-{{projectEffectiveVersion}}.tar.gz'
+    - path: target/distributions/kcetcd-{{projectVersion}}.zip
+      transform: 'kcetcd-{{projectEffectiveVersion}}.zip'
