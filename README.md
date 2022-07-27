@@ -36,7 +36,7 @@ The Docker Compose set-up in _docker-compose.yml_ provides the following infrast
 Prepare the connector plug-in:
 
 ```shell
-mvn clean verify -Pstage
+mvn clean verify
 ```
 
 Start Apache Kafka, Kafka Connect, ZooKeeper, and etcd:
