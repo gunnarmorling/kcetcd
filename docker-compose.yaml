@@ -17,13 +17,13 @@
 version: '2'
 services:
   zookeeper:
-    image: debezium/zookeeper:1.6
+    image: debezium/zookeeper:1.9
     ports:
      - 2181:2181
      - 2888:2888
      - 3888:3888
   kafka:
-    image: debezium/kafka:1.6
+    image: debezium/kafka:1.9
     ports:
      - 9092:9092
     links:
@@ -102,7 +102,7 @@ services:
       - "6379:2379"
       - "6380:2380"
   connect:
-   image: debezium/connect-base:1.6
+   image: debezium/connect-base:1.9
    ports:
     - 8083:8083
    links:
