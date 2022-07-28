@@ -47,7 +47,9 @@ public class EtcdSourceTaskTest {
     @Test
     public void shouldHandleAllTypesOfEvents() throws Exception {
         Client client = Client.builder()
-                .endpoints(etcd.clientEndpoints()).build();
+                .keepaliveWithoutCalls(false)
+                .endpoints(etcd.clientEndpoints())
+                .build();
 
         KV kvClient = client.getKVClient();
         long currentRevision = getCurrentRevision(kvClient);
@@ -104,7 +106,9 @@ public class EtcdSourceTaskTest {
     @Test
     public void shouldCatchUpWithChangesAfterRestart() throws Exception {
         Client client = Client.builder()
-                .endpoints(etcd.clientEndpoints()).build();
+                .keepaliveWithoutCalls(false)
+                .endpoints(etcd.clientEndpoints())
+                .build();
 
         KV kvClient = client.getKVClient();
         long currentRevision = getCurrentRevision(kvClient);

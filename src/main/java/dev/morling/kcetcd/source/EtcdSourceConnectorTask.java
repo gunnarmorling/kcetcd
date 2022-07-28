@@ -117,7 +117,11 @@ public class EtcdSourceConnectorTask extends SourceTask {
 
         private ListenerRegistration(String name, String endpoints[], long startingRevision) {
             this.name = name;
-            client = Client.builder().endpoints(endpoints).build();
+            client = Client.builder()
+                    .keepaliveWithoutCalls(false)
+                    .endpoints(endpoints)
+                    .build();
+
             watch = client.getWatchClient();
 
             Watch.Listener listener = Watch.listener(response -> {
