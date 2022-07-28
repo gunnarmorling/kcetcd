@@ -54,7 +54,7 @@ http PUT localhost:8083/connectors/test-connector/config < register-test.json
 Put something into one of the etcd clusters:
 
 ```shell
-docker-compose exec etcd-a-1 /bin/sh -c "ETCDCTL_API=3 /usr/local/bin/etcdctl put foo bar
+docker-compose exec etcd-a-1 /bin/sh -c "ETCDCTL_API=3 /usr/local/bin/etcdctl put foo bar"
 ```
 
 Consume events from Kafka:
