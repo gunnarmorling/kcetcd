@@ -42,10 +42,8 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.rnorth.ducttape.unreliables.Unreliables;
-import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.lifecycle.Startables;
-import org.testcontainers.utility.DockerImageName;
 
 import io.debezium.testing.testcontainers.Connector.State;
 import io.debezium.testing.testcontainers.ConnectorConfiguration;
@@ -54,18 +52,26 @@ import io.etcd.jetcd.ByteSequence;
 import io.etcd.jetcd.Client;
 import io.etcd.jetcd.KV;
 import io.etcd.jetcd.launcher.EtcdContainer;
+import io.strimzi.test.container.StrimziKafkaContainer;
 
 public class EtcdConnectorIT {
 
     private static Network network = Network.newNetwork();
 
-    private static KafkaContainer kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.0"))
+//    private static KafkaContainer kafkaContainer = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.2.0"))
+//            .withNetwork(network);
+
+    private static StrimziKafkaContainer kafkaContainer = new StrimziKafkaContainer()
+            .withBrokerId(1)
+            .withKraft()
             .withNetwork(network);
 
     public static DebeziumContainer connectContainer = new DebeziumContainer("debezium/connect-base:1.9.5.Final")
             .withFileSystemBind("target/kcetcd-connector", "/kafka/connect/kcetcd-connector")
             .withNetwork(network)
-            .withKafka(kafkaContainer)
+//            .withKafka(kafkaContainer)
+            .withEnv("BOOTSTRAP_SERVERS", kafkaContainer.getNetworkAliases().get(0) + ":9092")
+//            .withEnv("BOOTSTRAP_SERVERS", kafkaContainer.getBootstrapServers())
             .dependsOn(kafkaContainer);
 
     public static EtcdContainer etcdContainer = new EtcdContainer("gcr.io/etcd-development/etcd:v3.5.4", "etcd-a", Arrays.asList("etcd-a"))
@@ -165,7 +171,7 @@ public class EtcdConnectorIT {
         return allRecords;
     }
 
-    private KafkaConsumer<String, String> getConsumer(KafkaContainer kafkaContainer) {
+    private KafkaConsumer<String, String> getConsumer(StrimziKafkaContainer kafkaContainer) {
         return new KafkaConsumer<>(
                 Map.of(
                         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers(),
